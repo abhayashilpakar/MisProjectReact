@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/MisProjectReact/static/css/main.c751df31.css",
+    "main.js": "/MisProjectReact/static/js/main.9b0caffa.js",
+    "index.html": "/MisProjectReact/index.html",
+    "main.c751df31.css.map": "/MisProjectReact/static/css/main.c751df31.css.map",
+    "main.9b0caffa.js.map": "/MisProjectReact/static/js/main.9b0caffa.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c751df31.css",
+    "static/js/main.9b0caffa.js"
+  ]
+}
