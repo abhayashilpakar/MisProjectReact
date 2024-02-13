@@ -1,11 +1,34 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../../context/ShopContext";
-import ProductData from "../../data/ProductData";
 import CartItem from "./CartItem";
+import axios from "axios";
 
 function ShoppingCart() {
+  // State to store fetched products
+  const [products, setProducts] = useState([]);
+
+  // Fetch products from backend when component mounts
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/api/getproducts"
+        );
+        setProducts(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  // Get cart items and total cart amount from context
   const { cartItems, getTotalCartAmount } = useContext(ShopContext);
   const totalAmount = getTotalCartAmount();
+
+  // Filter products to only include those in the cart
+  const cartProducts = products.filter((product) => cartItems[product.id] > 0);
+
   return (
     <>
       <div className="bg-gray-100 py-8">
@@ -14,17 +37,10 @@ function ShoppingCart() {
 
           <div className="flex flex-col md:flex-row gap-4">
             <div className="md:w-3/4">
-              {/* {ProductData.map((product) => {
-                if (cartItems[product.id] !== 0) {
-                  return <CartItem data={product} />;
-                }
-              })} */}
-
-              {ProductData.filter((product) => cartItems[product.id] !== 0).map(
-                (product) => (
-                  <CartItem key={product.id} data={product} />
-                )
-              )}
+              {/* Map over products that are in the cart and render CartItem component */}
+              {cartProducts.map((product) => (
+                <CartItem key={product.id} data={product} />
+              ))}
             </div>
 
             <div className="md:w-1/4">
@@ -55,16 +71,6 @@ function ShoppingCart() {
           </div>
         </div>
       </div>
-
-      {/* 
-      <div>
-       
-        {ProductData.filter((product) => cartItems[product.id] !== 0).map(
-          (product) => (
-            <CartItem key={product.id} data={product} />
-          )
-        )}
-      </div> */}
     </>
   );
 }

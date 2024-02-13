@@ -3,10 +3,11 @@ import { FaRandom, FaRegHeart, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { ShopContext } from "../../context/ShopContext";
 
-function ProductList({ id, img, title, price }) {
+function ProductList({ _id, id, img, title, price }) {
   const { addToCart, cartItems } = useContext(ShopContext);
 
   const carItemAmount = cartItems[id];
+
   return (
     <>
       <div className="product-grid ">
@@ -29,7 +30,7 @@ function ProductList({ id, img, title, price }) {
             </li>
             <li>
               <Link
-                to={`/productdetail/${id}`}
+                to={`/productdetail/${_id}`}
                 data-tip="Product Detail "
                 className="relative "
               >

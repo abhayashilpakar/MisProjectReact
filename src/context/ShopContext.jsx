@@ -1,46 +1,71 @@
-import React, { createContext, useState } from "react";
-import ProductData from "../data/ProductData";
+import axios from "axios";
+import React, { createContext, useEffect, useState } from "react";
 
+// Create a context for managing shopping cart state
 export const ShopContext = createContext(null);
 
-const getDefaultCart = () => {
-  let cart = {};
-  for (let i = 1; i < ProductData.length + 1; i++) {
-    cart[i] = 0;
-  }
-
-  return cart;
-};
-
 function ShopContextProvider({ children }) {
-  const [cartItems, setCartItems] = useState(getDefaultCart());
+  // State for storing fetched products
+  const [products, setProducts] = useState([]);
 
-  const getTotalCartAmount = () => {
-    let totalAmount = 0;
-    for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        let itemInfo = ProductData.find(
-          (product) => product.id === Number(item)
+  // State for managing the items in the cart
+  const [cartItems, setCartItems] = useState({}); // Initialize as an empty object
+
+  // Fetch products from the API when the component mounts
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Fetch product data from the API
+        const response = await axios.get(
+          "http://localhost:3001/api/getproducts"
         );
-        totalAmount += cartItems[item] * itemInfo.price;
+        const fetchedProducts = response.data;
+        setProducts(fetchedProducts);
+
+        // Initialize cart items based on fetched products
+        const defaultCart = {};
+        fetchedProducts.forEach((product) => {
+          defaultCart[product.id] = 0;
+        });
+        setCartItems(defaultCart);
+      } catch (error) {
+        console.log(error);
       }
     }
+    fetchData();
+  }, []);
 
+  // Calculate the total amount of all items in the cart
+  const getTotalCartAmount = () => {
+    let totalAmount = 0;
+    for (const itemId in cartItems) {
+      if (cartItems[itemId] > 0) {
+        let itemInfo = products.find(
+          (product) => product.id === Number(itemId)
+        );
+        totalAmount += cartItems[itemId] * itemInfo.price;
+      }
+    }
     return totalAmount;
   };
 
+  // Add an item to the cart
   const addToCart = (itemId) => {
+    console.log("Adding item to cart:", itemId);
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
   };
 
+  // Remove an item from the cart
   const removeToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
   };
 
+  // Update the quantity of an item in the cart
   const updateCartItemCount = (newAmount, itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: newAmount }));
   };
 
+  // Define the context value with cart state and functions
   const contextValue = {
     cartItems,
     addToCart,
@@ -48,6 +73,8 @@ function ShopContextProvider({ children }) {
     updateCartItemCount,
     getTotalCartAmount,
   };
+
+  // Provide the context value to its children components
   return (
     <ShopContext.Provider value={contextValue}>{children}</ShopContext.Provider>
   );

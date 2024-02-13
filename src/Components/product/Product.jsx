@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import "./product.css";
-import Productdata from "../../data/ProductData";
+// import Productdata from "../../data/ProductData";
 
 // import { FaRandom, FaSearch, FaRegHeart } from "react-icons/fa";
 import ProductList from "./ProductList";
@@ -16,7 +16,7 @@ function Product() {
         const response = await axios.get(
           "http://localhost:3001/api/getproducts"
         );
-        console.log(response);
+        // console.log(response);
         setProducts(response.data);
       }
       fetch();

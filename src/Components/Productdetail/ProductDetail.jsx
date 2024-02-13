@@ -10,6 +10,8 @@ export default function ProductDetail() {
   const [products, setProducts] = useState([]);
   const { id } = useParams();
 
+  console.log(id);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -24,7 +26,7 @@ export default function ProductDetail() {
     fetchData();
   }, []);
 
-  const product = products.find((product) => product.id === +id);
+  const product = products.find((product) => product._id === id);
 
   if (!product) {
     return <div>Error: Product not found</div>;

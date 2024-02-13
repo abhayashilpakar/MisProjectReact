@@ -23,11 +23,13 @@ import SignIn from "./Components/Signin/SignIn";
 // import LoginPage from "./Components/Login/LoginPage";
 
 function App() {
+  const url = window.location.href;
+
   return (
     <>
       <ShopContextProvider>
         <BrowserRouter>
-          <Navbar />
+          {!url.includes("login") && <Navbar />}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
@@ -35,13 +37,14 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             {/* <Route path="/" element={<Navbar></Navbar>}></Route> */}
-            <Route path="/productdetail/:id" element={<ProductDetail />} />
+            <Route path="/productdetail/:_id" element={<ProductDetail />} />
             <Route path="/shoppingcart" element={<ShoppingCart />} />
             <Route path="/product" element={<AllProduct />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/siginup" element={<SignIn />} />
           </Routes>
-          <Footer />
+
+          {!url.includes("login") && <Footer />}
         </BrowserRouter>
       </ShopContextProvider>
     </>
