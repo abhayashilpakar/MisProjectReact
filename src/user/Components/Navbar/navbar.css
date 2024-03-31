@@ -1,0 +1,25 @@
+
+
+.underLineEffect{
+    position: relative;
+    display: inline-block;
+}
+.underLineEffect::after{
+    content: '';
+    position: absolute;
+    height: 2px;
+    width:100%;
+    background-color: orange;
+    bottom: -4px;
+    left: 0px;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    border-radius: 1px;
+    /* opacity: 0; */
+}
+.underLineEffect:hover::after{
+    transform: scaleX(1);
+}
+
+
+
